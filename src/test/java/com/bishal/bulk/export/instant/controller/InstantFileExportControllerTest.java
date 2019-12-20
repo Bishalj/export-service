@@ -1,8 +1,10 @@
 package com.bishal.bulk.export.instant.controller;
 
 
+import com.bishal.bulk.export.common.mapper.response.FileDetailsResponseMapper;
 import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
 import com.bishal.bulk.export.instant.service.IFileExportMetaDataService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +27,20 @@ public class InstantFileExportControllerTest {
     @Autowired
     private IFileExportMetaDataService fileExportMetaDataService;
 
+
+
+    @Before
+    public void initializeData(){
+
+    }
+
     @Test
     public void getFileExportMetaDataFromDatabase(){
         DataExportRequestMapper dataExportRequestMapper = new DataExportRequestMapper();
-        Flux<DataExportRequestMapper> fileExportMetaDataFlux = fileExportMetaDataService
+        Flux<FileDetailsResponseMapper> fileExportMetaDataFlux = fileExportMetaDataService
                                                                                     .getFilesMetaDetailsContainingData(dataExportRequestMapper);
+
+
     }
 
 

@@ -9,6 +9,8 @@ public class DataExportRequestMapper {
 
     private Long batchSizePerFile;
 
+    private Boolean isDataNeedsToBeOrdered;
+
     public String getDatabaseQuery() {
         return databaseQuery;
     }
@@ -31,5 +33,13 @@ public class DataExportRequestMapper {
 
     public void setBatchSizePerFile(Long batchSizePerFile) {
         this.batchSizePerFile = batchSizePerFile;
+    }
+
+    public Boolean getDataNeedsToBeOrdered() {
+        return isDataNeedsToBeOrdered;
+    }
+
+    public void setDataNeedsToBeOrdered(Boolean dataNeedsToBeOrdered) {
+        isDataNeedsToBeOrdered = dataNeedsToBeOrdered;
     }
 }
