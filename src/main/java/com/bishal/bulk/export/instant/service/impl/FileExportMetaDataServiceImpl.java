@@ -9,7 +9,7 @@ import reactor.core.publisher.Flux;
 @Service
 public class FileExportMetaDataServiceImpl implements IFileExportMetaDataService {
     @Override
-    public Flux<FileDetailsResponseMapper> getFilesMetaDetailsContainingData(DataExportRequestMapper dataExportRequestMapper) {
-        return null;
+    public Flux<FileDetailsResponseMapper> getDetailOfFileContainingData(final DataExportRequestMapper dataExportRequestMapper) {
+        return Flux.just(null);
     }
 }

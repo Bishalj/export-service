@@ -6,6 +6,6 @@ import reactor.core.publisher.Flux;
 
 public interface IFileExportMetaDataService {
 
-    Flux<FileDetailsResponseMapper> getFilesMetaDetailsContainingData(final DataExportRequestMapper dataExportRequestMapper);
+    Flux<FileDetailsResponseMapper> getDetailOfFileContainingData(final DataExportRequestMapper dataExportRequestMapper);
 
 }
