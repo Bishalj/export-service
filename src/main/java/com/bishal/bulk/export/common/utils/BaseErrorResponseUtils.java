@@ -4,6 +4,9 @@ import com.bishal.bulk.export.common.mapper.response.BaseErrorResponse;
 
 public class BaseErrorResponseUtils {
 
+    private BaseErrorResponseUtils() {
+    }
+
     public static BaseErrorResponse getBaseErrorResponse(String message){
         BaseErrorResponse baseErrorResponse = new BaseErrorResponse();
         baseErrorResponse.setMessage(message);

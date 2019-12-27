@@ -7,6 +7,9 @@ import reactor.core.publisher.Mono;
 
 public class ResponseEntityUtils {
 
+    private ResponseEntityUtils() {
+    }
+
     public static <T> ResponseEntity<Mono<T>> getResponseFromMono(final Mono<T> data, final HttpStatus httpStatus) {
         return new ResponseEntity<>(data, httpStatus);
     }
