@@ -62,7 +62,7 @@ public class TestInstantFileExportControllerTest {
         Flux<FileDetailsResponseMapper> fileExportMetaDataFlux =
                 webTestClient.post()
                     .uri(EXPORT_DATA)
-                    .body(dataExportRequestMapper, DataExportRequestMapper.class)
+                    .body(Mono.just(dataExportRequestMapper), DataExportRequestMapper.class)
                     .accept(MediaType.valueOf(APPLICATION_JSON_VALUE))
                     .exchange()
                     .expectStatus().isOk()
@@ -77,7 +77,7 @@ public class TestInstantFileExportControllerTest {
     }
 
     @Test
-    public void getFileExportNoContentTest(){
+    public void testGetFileExportNoContentTest(){
         final DataExportRequestMapper dataExportRequestMapper = initializeData();
                 webTestClient.post()
                         .uri(EXPORT_DATA)

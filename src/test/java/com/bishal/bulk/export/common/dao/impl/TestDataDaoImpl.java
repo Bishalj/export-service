@@ -2,18 +2,13 @@ package com.bishal.bulk.export.common.dao.impl;
 
 import com.bishal.bulk.export.common.dao.ITestDataDao;
 import com.bishal.bulk.export.instant.controller.model.TestData;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Flux;
 
 import java.util.Date;
-
 
 @Repository
 public class TestDataDaoImpl implements ITestDataDao {
