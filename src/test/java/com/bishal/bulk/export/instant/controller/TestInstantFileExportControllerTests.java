@@ -26,7 +26,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @AutoConfigureWebTestClient
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class TestInstantFileExportControllerTest {
+public class TestInstantFileExportControllerTests {
 
 
     @Autowired
@@ -77,7 +77,7 @@ public class TestInstantFileExportControllerTest {
     }
 
     @Test
-    public void testGetFileExportNoContentTest(){
+    public void testGetFileExportNoContentTests(){
         final DataExportRequestMapper dataExportRequestMapper = initializeData();
                 webTestClient.post()
                         .uri(EXPORT_DATA)
