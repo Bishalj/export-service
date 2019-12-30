@@ -18,8 +18,7 @@
 		<java.version>11</java.version>
 
 			<!-- Do not configure plugin with properties -->
-			<surefire.plugin.argline>-XX:PermSize=128m -XX:MaxPermSize=256m</surefire.plugin.argline>
-
+			<integration.test.target>${project.build.directory}/jacoco.exec</integration.test.target>
 	</properties>
 
 	<dependencies>
@@ -83,96 +82,93 @@
 		<dependency>
 			<groupId>org.jacoco</groupId>
 			<artifactId>org.jacoco.agent</artifactId>
-			<version>0.7.5.201505241946</version>
 			<classifier>runtime</classifier>
+			<version>0.8.5</version>
 			<scope>test</scope>
 		</dependency>
+
 
 	</dependencies>
 
 	<build>
 		<plugins>
-            <!--<plugin>-->
-                <!--<groupId>org.sonarsource.scanner.maven</groupId>-->
-                <!--<artifactId>sonar-maven-plugin</artifactId>-->
-                <!--<version>3.1.1</version>-->
-            <!--</plugin>-->
-				<!--<plugin>-->
-					<!--<groupId>org.apache.maven.plugins</groupId>-->
-					<!--<artifactId>maven-surefire-plugin</artifactId>-->
-					<!--<version>2.19.1</version>-->
-					<!--<configuration>-->
-						<!--<includes>-->
-							<!--<include>**/*Tests.java</include>-->
-						<!--</includes>-->
-					<!--</configuration>-->
-				<!--</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>${surefire.plugin.argline} -XX:PermSize=256m -XX:MaxPermSize=1048m</argLine>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.5.201505241946</version>
-				<configuration>
-					<excludes>
-						<exclude>org/company/*</exclude>
-					</excludes>
-				</configuration>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.3</version>
 				<executions>
 					<execution>
-						<id>default-prepare-agent</id>
-						<phase>initialize</phase>
 						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>default-check</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<rule implementation="org.jacoco.maven.RuleConfiguration">
-									<element>BUNDLE</element>
-									<limits>
-										<limit implementation="org.jacoco.report.check.Limit">
-											<counter>INSTRUCTION</counter>
-											<value>COVEREDRATIO</value>
-											<minimum>0.0</minimum>
-										</limit>
-										<limit implementation="org.jacoco.report.check.Limit">
-											<counter>BRANCH</counter>
-											<value>COVEREDRATIO</value>
-											<minimum>0.0</minimum>
-										</limit>
-										<limit implementation="org.jacoco.report.check.Limit">
-											<counter>CLASS</counter>
-											<value>MISSEDCOUNT</value>
-											<maximum>1000</maximum>
-										</limit>
-									</limits>
-								</rule>
-							</rules>
-						</configuration>
-					</execution>
-					<execution>
-						<id>default-report</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>report</goal>
+							<goal>properties</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.15</version>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.5</version>
+				<executions>
+					<execution>
+						<id>report-aggregate</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report-aggregate</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<!-- Sets the path to the file which contains the execution data. -->
+							<destFile>${integration.test.target}</destFile>
+							<!--
+                                Sets the name of the property containing the settings
+                                for JaCoCo runtime agent.
+                            -->
+							<!--
+                                                        <propertyName>failSafeArgLine</propertyName>
+                            -->
+						</configuration>
+					</execution>
+					<!--  <execution>
+                          <id>post-integration-test</id>
+                          <phase>post-integration-test</phase>
+                          <goals>
+                              <goal>report</goal>
+                          </goals>
+                          <configuration>
+                              &lt;!&ndash; Sets the path to the file which contains the execution data. &ndash;&gt;
+                              <dataFile>${integration.test.target}</dataFile>
+                              &lt;!&ndash; Sets the output directory for the code coverage report. &ndash;&gt;
+                              <outputDirectory>target/reports/jacoco-it</outputDirectory>
+                          </configuration>
+                      </execution>
+
+  -->
+					<execution>
+						<goals>
+							<goal>report-integration</goal>
+						</goals>
+						<configuration>
+							<!-- Sets the path to the file which contains the execution data. -->
+							<dataFile>${integration.test.target}</dataFile>
+							<!-- Sets the output directory for the code coverage report. -->
+							<outputDirectory>target/reports/jacoco-it</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 </project>
-
+<!--mvn clean compile jacoco:prepare-agent install jacoco:report-->
 <!--mvn sonar:sonar -Dsonar.host.url=http://localhost:9092-->
