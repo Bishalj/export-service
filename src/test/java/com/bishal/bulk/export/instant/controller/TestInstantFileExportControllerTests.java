@@ -2,7 +2,7 @@ package com.bishal.bulk.export.instant.controller;
 
 
 import com.bishal.bulk.export.common.dao.ITestDataDao;
-import com.bishal.bulk.export.common.mapper.response.FileDetailsResponseMapper;
+import com.bishal.bulk.export.common.mapper.response.FileMetaDetailsResponse;
 import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
 import com.bishal.bulk.export.instant.service.IFileExportMetaDataService;
 import org.junit.Assert;
@@ -50,7 +50,7 @@ public class TestInstantFileExportControllerTests {
 
 
 
-//    @Test
+    @Test
     public void getFileExportMetaDataFromDatabase(){
         try {
             testDataDao.insertDummyData();
@@ -59,21 +59,33 @@ public class TestInstantFileExportControllerTests {
             Assert.fail();
         }
         final DataExportRequestMapper dataExportRequestMapper = initializeData();
-        Flux<FileDetailsResponseMapper> fileExportMetaDataFlux =
+        Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux =
                 webTestClient.post()
                     .uri(EXPORT_DATA)
                     .body(Mono.just(dataExportRequestMapper), DataExportRequestMapper.class)
                     .accept(MediaType.valueOf(APPLICATION_JSON_VALUE))
                     .exchange()
                     .expectStatus().isOk()
-                    .returnResult(FileDetailsResponseMapper.class)
+                    .returnResult(FileMetaDetailsResponse.class)
                     .getResponseBody();
 
-        StepVerifier.create(fileExportMetaDataFlux)
+        StepVerifier.create(fileMetaDetailsResponseFlux)
                 .expectSubscription()
-                .expectNextCount(1)
+                .consumeRecordedWith( fileDetailsResponseMappers -> fileDetailsResponseMappers
+                                                                       .parallelStream()
+                                                                       .map( fileMetaDetailsResponse -> isFileDetailsResponseValid(fileMetaDetailsResponse))
+
+                )
                 .verifyComplete();
 
+    }
+
+    private boolean isFileDetailsResponseValid(FileMetaDetailsResponse fileMetaDetailsResponse) {
+        Assert.assertNotNull(fileMetaDetailsResponse);
+        Assert.assertNotNull(fileMetaDetailsResponse.getFileName());
+        Assert.assertNotNull(fileMetaDetailsResponse.getCreatedAt());
+        Assert.assertNotNull(fileMetaDetailsResponse.getS3FileUrl());
+        return true;
     }
 
     @Test

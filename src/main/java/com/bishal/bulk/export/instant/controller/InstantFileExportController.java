@@ -3,7 +3,7 @@ package com.bishal.bulk.export.instant.controller;
 import com.bishal.bulk.export.common.constants.ApiRouteUrl;
 import com.bishal.bulk.export.common.constants.HttpCodesConstant;
 import com.bishal.bulk.export.common.exception.NoDataFoundException;
-import com.bishal.bulk.export.common.mapper.response.FileDetailsResponseMapper;
+import com.bishal.bulk.export.common.mapper.response.FileMetaDetailsResponse;
 import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
 import com.bishal.bulk.export.common.utils.ResponseEntityUtils;
 import com.bishal.bulk.export.instant.service.IFileExportMetaDataService;
@@ -23,9 +23,9 @@ public class InstantFileExportController {
 
 
     @PostMapping(value = ApiRouteUrl.InstantController.EXPORT_DATA)
-    public ResponseEntity<Flux<FileDetailsResponseMapper>> getFileExportDetail(@RequestBody final DataExportRequestMapper dataExportRequestMapper){
+    public ResponseEntity<Flux<FileMetaDetailsResponse>> getFileExportDetail(@RequestBody final DataExportRequestMapper dataExportRequestMapper){
 
-        Flux<FileDetailsResponseMapper> fileDetailFlux = fileExportMetaDataService
+        Flux<FileMetaDetailsResponse> fileDetailFlux = fileExportMetaDataService
                 .getDetailOfFileContainingData(dataExportRequestMapper)
                 .switchIfEmpty(Flux.error(new NoDataFoundException("No Data Found")));
 

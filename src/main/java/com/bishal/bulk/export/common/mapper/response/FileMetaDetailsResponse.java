@@ -1,6 +1,6 @@
 package com.bishal.bulk.export.common.mapper.response;
 
-public class FileMetaDetails {
+public class FileMetaDetailsResponse {
 
     private String s3FileUrl;
 
