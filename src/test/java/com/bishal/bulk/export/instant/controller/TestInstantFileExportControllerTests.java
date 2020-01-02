@@ -4,6 +4,7 @@ package com.bishal.bulk.export.instant.controller;
 import com.bishal.bulk.export.common.dao.ITestDataDao;
 import com.bishal.bulk.export.common.mapper.response.FileMetaDetailsResponse;
 import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
+import com.bishal.bulk.export.common.service.initialize.IDataExportRequestMapperInitializer;
 import com.bishal.bulk.export.instant.service.IFileExportMetaDataService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,19 +39,10 @@ public class TestInstantFileExportControllerTests {
     @Autowired
     private ITestDataDao testDataDao;
 
+    @Autowired
+    private IDataExportRequestMapperInitializer dataExportRequestMapperInitializer;
 
-    public DataExportRequestMapper initializeData(){
-        final DataExportRequestMapper dataExportRequestMapper = new DataExportRequestMapper();
-        dataExportRequestMapper.setBatchSizePerFile(100000l);
-        dataExportRequestMapper.setDatabaseQuery("{}");
-        dataExportRequestMapper.setDatabaseUniqueKey("LOCAL");
-        dataExportRequestMapper.setDataNeedsToBeOrdered(false);
-        return dataExportRequestMapper;
-    }
-
-
-
-    @Test
+//    @Test
     public void getFileExportMetaDataFromDatabase(){
         try {
             testDataDao.insertDummyData();
@@ -58,7 +50,7 @@ public class TestInstantFileExportControllerTests {
         } catch (Exception e) {
             Assert.fail();
         }
-        final DataExportRequestMapper dataExportRequestMapper = initializeData();
+        final DataExportRequestMapper dataExportRequestMapper = dataExportRequestMapperInitializer.getRequestForEntireDataInCollection();
         Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux =
                 webTestClient.post()
                     .uri(EXPORT_DATA)
@@ -90,7 +82,7 @@ public class TestInstantFileExportControllerTests {
 
     @Test
     public void testGetFileExportNoContentTests(){
-        final DataExportRequestMapper dataExportRequestMapper = initializeData();
+        final DataExportRequestMapper dataExportRequestMapper = dataExportRequestMapperInitializer.getRequestForEntireDataInCollection();
                 webTestClient.post()
                         .uri(EXPORT_DATA)
                         .body(Mono.just(dataExportRequestMapper), DataExportRequestMapper.class)
@@ -99,5 +91,60 @@ public class TestInstantFileExportControllerTests {
                         .expectStatus().isNotFound();
     }
 
+    @Test
+    public void getFileDetails_InvalidRequestDataWithoutQueryFiled() {
+
+                webTestClient.post()
+                        .uri(EXPORT_DATA)
+                        .body(
+                                Mono.just(dataExportRequestMapperInitializer.getInvalidRequestData_NoQueryPresent()),
+                                DataExportRequestMapper.class
+                        )
+                        .accept(MediaType.valueOf(APPLICATION_JSON_VALUE))
+                        .exchange()
+                        .expectStatus().isBadRequest();
+    }
+
+    @Test
+    public void getFileDetails_InvalidRequestDataWithoutBatchSizePerFileFiled() {
+
+        webTestClient.post()
+                .uri(EXPORT_DATA)
+                .body(
+                        Mono.just(dataExportRequestMapperInitializer.getInvalidRequestData_NoBatchSizePerFilePresent()),
+                        DataExportRequestMapper.class
+                )
+                .accept(MediaType.valueOf(APPLICATION_JSON_VALUE))
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    public void getFileDetails_InvalidRequestDataWithoutNoDatabaseUniqueKeyFiled() {
+
+        webTestClient.post()
+                .uri(EXPORT_DATA)
+                .body(
+                        Mono.just(dataExportRequestMapperInitializer.getInvalidRequestData_NoDatabaseUniqueKeyPresent()),
+                        DataExportRequestMapper.class
+                )
+                .accept(MediaType.valueOf(APPLICATION_JSON_VALUE))
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    public void getFileDetails_InvalidRequestDataWithoutNoOrderedField() {
+
+        webTestClient.post()
+                .uri(EXPORT_DATA)
+                .body(
+                        Mono.just(dataExportRequestMapperInitializer.getInvalidRequestData_NoOrderedFieldPresent()),
+                        DataExportRequestMapper.class
+                )
+                .accept(MediaType.valueOf(APPLICATION_JSON_VALUE))
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
 
 }

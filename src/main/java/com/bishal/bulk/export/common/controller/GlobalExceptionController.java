@@ -22,8 +22,17 @@ public class GlobalExceptionController {
                 );
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<BaseErrorResponse> illegalArgumentException(final IllegalArgumentException exception) {
+        return ResponseEntityUtils
+                .getResponse(
+                        BaseErrorResponseUtils.getBaseErrorResponse(exception.getMessage()),
+                        HttpCodesConstant.HTTP_BAD_REQUEST
+                );
+    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<BaseErrorResponse> noDataFoundException(final Exception exception) {
+    public ResponseEntity<BaseErrorResponse> globalException(final Exception exception) {
         return ResponseEntityUtils
                 .getResponse(
                         BaseErrorResponseUtils.getBaseErrorResponse(exception.getMessage()),
