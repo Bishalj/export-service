@@ -13,7 +13,7 @@ public class DataExportRequestMapperInitializeImpl implements IDataExportRequest
         dataExportRequestMapper.setBatchSizePerFile(100000l);
         dataExportRequestMapper.setDatabaseQuery("{}");
         dataExportRequestMapper.setDatabaseUniqueKey("LOCAL");
-        dataExportRequestMapper.setDataNeedsToBeOrdered(false);
+        dataExportRequestMapper.setIsDataNeedsToBeOrdered(false);
         return dataExportRequestMapper;
     }
 
@@ -22,7 +22,7 @@ public class DataExportRequestMapperInitializeImpl implements IDataExportRequest
         final DataExportRequestMapper dataExportRequestMapper = new DataExportRequestMapper();
         dataExportRequestMapper.setDatabaseQuery("{}");
         dataExportRequestMapper.setDatabaseUniqueKey("LOCAL");
-        dataExportRequestMapper.setDataNeedsToBeOrdered(false);
+        dataExportRequestMapper.setIsDataNeedsToBeOrdered(false);
         return dataExportRequestMapper;
     }
 
@@ -31,7 +31,7 @@ public class DataExportRequestMapperInitializeImpl implements IDataExportRequest
         final DataExportRequestMapper dataExportRequestMapper = new DataExportRequestMapper();
         dataExportRequestMapper.setBatchSizePerFile(100000l);
         dataExportRequestMapper.setDatabaseQuery("{}");
-        dataExportRequestMapper.setDataNeedsToBeOrdered(false);
+        dataExportRequestMapper.setIsDataNeedsToBeOrdered(false);
         return dataExportRequestMapper;
     }
 
@@ -40,7 +40,7 @@ public class DataExportRequestMapperInitializeImpl implements IDataExportRequest
         final DataExportRequestMapper dataExportRequestMapper = new DataExportRequestMapper();
         dataExportRequestMapper.setBatchSizePerFile(100000l);
         dataExportRequestMapper.setDatabaseUniqueKey("LOCAL");
-        dataExportRequestMapper.setDataNeedsToBeOrdered(false);
+        dataExportRequestMapper.setIsDataNeedsToBeOrdered(false);
         return dataExportRequestMapper;
     }
 

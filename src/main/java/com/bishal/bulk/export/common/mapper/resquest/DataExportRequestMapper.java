@@ -1,6 +1,10 @@
 package com.bishal.bulk.export.common.mapper.resquest;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class DataExportRequestMapper {
 
     private String databaseQuery;
@@ -35,11 +39,11 @@ public class DataExportRequestMapper {
         this.batchSizePerFile = batchSizePerFile;
     }
 
-    public Boolean getDataNeedsToBeOrdered() {
+    public Boolean getIsDataNeedsToBeOrdered() {
         return isDataNeedsToBeOrdered;
     }
 
-    public void setDataNeedsToBeOrdered(Boolean dataNeedsToBeOrdered) {
+    public void setIsDataNeedsToBeOrdered(Boolean dataNeedsToBeOrdered) {
         isDataNeedsToBeOrdered = dataNeedsToBeOrdered;
     }
 }
