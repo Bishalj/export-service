@@ -21,16 +21,12 @@ public class DatabaseCredentialUtils {
     private String passwordEnvironemntVariableKey;
 
     public Mono<DatabaseCredentials> getDatabaseCredential(final String databaseUniqueKey){
-        try {
             final DatabaseCredentials databaseCredentials = new DatabaseCredentials();
             databaseCredentials.setHostUrl(fetchDatabaseHostUrl(databaseUniqueKey));
             databaseCredentials.setPortNumber(fetchDatabasePortNumber(databaseUniqueKey));
             databaseCredentials.setUsername(fetchDatabaseUsername(databaseUniqueKey));
             databaseCredentials.setPassword(fetchDatabasePassword(databaseUniqueKey));
             return Mono.just(databaseCredentials);
-        }catch (Exception ex){
-            return Mono.error(ex);
-        }
     }
 
 

@@ -37,7 +37,7 @@ public class TestDatabaseCredentialDetailsServiceImplTests {
     @Value("${env.database.host.url}")
     private static String hostUrlEnvironemntVariableKey;
 
-//    @Test
+    @Test
     public void fetchDatabaseCredentials_EnvironmentVariablesPresent_SuccessfullyFetchedDatabaseDetails(){
         Mono<DatabaseCredentials> databaseCredentials = databaseCredentialService
                                                             .getDatabaseCredentialDetails(
@@ -50,20 +50,20 @@ public class TestDatabaseCredentialDetailsServiceImplTests {
                 .verifyComplete();
     }
 
-    @Test
-    public void fetchDatabaseCredentialsTest_EnvironmentVariablesNotPresent_failedFetchingDatabaseDetails(){
-        System.out.println("************************************** " + hostUrlEnvironemntVariableKey + " ***************************************");
-        Mono<DatabaseCredentials> databaseCredentials = databaseCredentialService
-                .getDatabaseCredentialDetails(
-                        dataExportRequestMapperInitializer.getRequestForEntireDataInCollection()
-                );
-
-        StepVerifier.create(databaseCredentials)
-                .expectError(NoDataFoundException.class)
-                .verify();
-
-
-    }
+//    @Test
+//    public void fetchDatabaseCredentialsTest_EnvironmentVariablesNotPresent_failedFetchingDatabaseDetails(){
+//        System.out.println("************************************** " + hostUrlEnvironemntVariableKey + " ***************************************");
+//        Mono<DatabaseCredentials> databaseCredentials = databaseCredentialService
+//                .getDatabaseCredentialDetails(
+//                        dataExportRequestMapperInitializer.getRequestForEntireDataInCollection()
+//                );
+//
+//        StepVerifier.create(databaseCredentials)
+//                .expectError(NoDataFoundException.class)
+//                .verify();
+//
+//
+//    }
 
     private void isDatabaseCredentialDetailsValid(final DatabaseCredentials databaseCredentials) {
         Assert.assertNotNull(databaseCredentials);
