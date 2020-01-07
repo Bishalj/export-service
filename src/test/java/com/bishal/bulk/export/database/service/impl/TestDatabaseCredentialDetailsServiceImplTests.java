@@ -1,9 +1,7 @@
 package com.bishal.bulk.export.database.service.impl;
 
-import com.bishal.bulk.export.common.exception.NoDataFoundException;
-import com.bishal.bulk.export.common.service.initialize.IDataExportRequestMapperInitializer;
+import com.bishal.bulk.export.database.initialize.IDatabaseCredentialInitializerService;
 import com.bishal.bulk.export.database.model.DatabaseCredentials;
-import com.bishal.bulk.export.database.service.IDatabaseCredentialService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,14 +12,12 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureWebTestClient
-//@TestPropertySource("classpath:application-test.properties")
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @EnableAutoConfiguration
@@ -29,20 +25,11 @@ import reactor.test.StepVerifier;
 public class TestDatabaseCredentialDetailsServiceImplTests {
 
     @Autowired
-    private IDatabaseCredentialService databaseCredentialService;
-
-    @Autowired
-    private IDataExportRequestMapperInitializer dataExportRequestMapperInitializer;
-
-    @Value("${env.database.host.url}")
-    private static String hostUrlEnvironemntVariableKey;
+    private IDatabaseCredentialInitializerService databaseCredentialInitializerService;
 
     @Test
     public void fetchDatabaseCredentials_EnvironmentVariablesPresent_SuccessfullyFetchedDatabaseDetails(){
-        Mono<DatabaseCredentials> databaseCredentials = databaseCredentialService
-                                                            .getDatabaseCredentialDetails(
-                                                                dataExportRequestMapperInitializer.getRequestForEntireDataInCollection()
-                                                            );
+        Mono<DatabaseCredentials> databaseCredentials = databaseCredentialInitializerService.getValidDatabaseCredentials();
 
         StepVerifier.create(databaseCredentials)
                 .expectSubscription()
