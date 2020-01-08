@@ -16,8 +16,6 @@
 
 	<properties>
 		<java.version>11</java.version>
-
-			<!-- Do not configure plugin with properties -->
 			<integration.test.target>${project.build.directory}/jacoco.exec</integration.test.target>
 	</properties>
 

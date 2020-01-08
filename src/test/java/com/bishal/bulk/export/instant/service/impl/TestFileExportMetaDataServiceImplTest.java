@@ -38,7 +38,7 @@ public class TestFileExportMetaDataServiceImplTest {
         }
         final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = fileExportMetaDataService
                                                                         .getDetailOfFileContainingData(
-                                                                                dataExportRequestMapperInitializer.getRequestForEntireDataInCollection()
+                                                                                dataExportRequestMapperInitializer.getValidRequestDataForEntireDataInCollection()
                                                                         );
         StepVerifier.create(fileMetaDetailsResponseFlux)
                 .expectSubscription()
@@ -53,7 +53,7 @@ public class TestFileExportMetaDataServiceImplTest {
     public void testGetDetailOfFileContainingData_NoDataFound() {
         final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = fileExportMetaDataService
                 .getDetailOfFileContainingData(
-                        dataExportRequestMapperInitializer.getRequestForEntireDataInCollection()
+                        dataExportRequestMapperInitializer.getValidRequestDataForEntireDataInCollection()
                 ).log();
         StepVerifier.create(fileMetaDetailsResponseFlux)
                 .expectSubscription()

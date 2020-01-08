@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public class DataExportRequestMapperInitializeImpl implements IDataExportRequestMapperInitializer {
 
     @Override
-    public DataExportRequestMapper getRequestForEntireDataInCollection() {
+    public DataExportRequestMapper getValidRequestDataForEntireDataInCollection() {
         final DataExportRequestMapper dataExportRequestMapper = new DataExportRequestMapper();
         dataExportRequestMapper.setBatchSizePerFile(100000l);
         dataExportRequestMapper.setDatabaseQuery("{}");

@@ -42,7 +42,7 @@ public class TestDatabaseCredentialDetailsServiceImplTests {
 //        System.out.println("************************************** " + hostUrlEnvironemntVariableKey + " ***************************************");
 //        Mono<DatabaseCredentials> databaseCredentials = databaseCredentialService
 //                .getDatabaseCredentialDetails(
-//                        dataExportRequestMapperInitializer.getRequestForEntireDataInCollection()
+//                        dataExportRequestMapperInitializer.getValidRequestDataForEntireDataInCollection()
 //                );
 //
 //        StepVerifier.create(databaseCredentials)

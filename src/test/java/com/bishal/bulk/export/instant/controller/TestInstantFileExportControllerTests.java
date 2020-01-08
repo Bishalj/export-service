@@ -50,7 +50,7 @@ public class TestInstantFileExportControllerTests {
         } catch (Exception e) {
             Assert.fail();
         }
-        final DataExportRequestMapper dataExportRequestMapper = dataExportRequestMapperInitializer.getRequestForEntireDataInCollection();
+        final DataExportRequestMapper dataExportRequestMapper = dataExportRequestMapperInitializer.getValidRequestDataForEntireDataInCollection();
         Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux =
                 webTestClient.post()
                     .uri(EXPORT_DATA)
@@ -82,7 +82,7 @@ public class TestInstantFileExportControllerTests {
 
     @Test
     public void testGetFileExportNoContentTests(){
-        final DataExportRequestMapper dataExportRequestMapper = dataExportRequestMapperInitializer.getRequestForEntireDataInCollection();
+        final DataExportRequestMapper dataExportRequestMapper = dataExportRequestMapperInitializer.getValidRequestDataForEntireDataInCollection();
                 webTestClient.post()
                         .uri(EXPORT_DATA)
                         .body(Mono.just(dataExportRequestMapper), DataExportRequestMapper.class)

@@ -7,6 +7,8 @@ import com.bishal.bulk.export.common.mapper.response.FileMetaDetailsResponse;
 import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
 import com.bishal.bulk.export.common.utils.ResponseEntityUtils;
 import com.bishal.bulk.export.instant.service.IFileExportMetaDataService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +19,7 @@ import reactor.core.publisher.Flux;
 @RestController
 public class InstantFileExportController {
 
+    private final Logger LEAD_CREATION_SERVICE_LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private IFileExportMetaDataService fileExportMetaDataService;
@@ -24,7 +27,6 @@ public class InstantFileExportController {
 
     @PostMapping(value = ApiRouteUrl.InstantController.EXPORT_DATA)
     public ResponseEntity<Flux<FileMetaDetailsResponse>> getFileExportDetail(@RequestBody final DataExportRequestMapper dataExportRequestMapper){
-        System.out.println("Application working**************");
         Flux<FileMetaDetailsResponse> fileDetailFlux = fileExportMetaDataService
                 .getDetailOfFileContainingData(dataExportRequestMapper)
                 .switchIfEmpty(Flux.error(new NoDataFoundException("No Data Found")));

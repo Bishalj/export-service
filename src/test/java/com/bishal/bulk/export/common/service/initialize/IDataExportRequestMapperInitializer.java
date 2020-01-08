@@ -4,7 +4,7 @@ import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
 
 public interface IDataExportRequestMapperInitializer {
 
-    DataExportRequestMapper getRequestForEntireDataInCollection();
+    DataExportRequestMapper getValidRequestDataForEntireDataInCollection();
 
     DataExportRequestMapper getInvalidRequestData_NoQueryPresent();
 

@@ -6,6 +6,7 @@ public class DatabaseCredentials {
     private Integer portNumber;
     private String username;
     private String password;
+    private String databaseName;
 
     public String getHostUrl() {
         return hostUrl;
@@ -37,5 +38,13 @@ public class DatabaseCredentials {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getDatabaseName() {
+        return databaseName;
+    }
+
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
     }
 }
