@@ -2,9 +2,9 @@ package com.bishal.bulk.export.database.service.impl;
 
 import com.bishal.bulk.export.common.exception.NoDataFoundException;
 import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
+import com.bishal.bulk.export.common.service.IExportServiceBeanFactory;
 import com.bishal.bulk.export.database.model.DatabaseCredentials;
 import com.bishal.bulk.export.database.service.IDatabaseCredentialService;
-import com.bishal.bulk.export.database.utils.DatabaseCredentialUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -16,12 +16,15 @@ public class DatabaseCredentialServiceImpl implements IDatabaseCredentialService
 
 
     @Autowired
-    private DatabaseCredentialUtils databaseCredentialUtils;
+    private IExportServiceBeanFactory exportServiceBeanFactory;
 
     @Override
     public Mono<DatabaseCredentials> getDatabaseCredentialDetails(DataExportRequestMapper dataExportRequestMapper){
 
-        final Mono<DatabaseCredentials> databaseCredentialMono = databaseCredentialUtils.getDatabaseCredential(dataExportRequestMapper.getDatabaseUniqueKey());
+        final Mono<DatabaseCredentials> databaseCredentialMono = exportServiceBeanFactory
+                                                                    .getDatabaseBeanFactory()
+                                                                    .getDatabaseCredentialUtils()
+                                                                    .getDatabaseCredential(dataExportRequestMapper.getDatabaseUniqueKey());
         return databaseCredentialMono
                 .flatMap(databaseCredential -> processDatabaseCredentials(databaseCredential));
 

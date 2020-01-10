@@ -1,4 +1,4 @@
-package com.bishal.bulk.export.common.service.initialize;
+package com.bishal.bulk.export.service.initialize;
 
 import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
 

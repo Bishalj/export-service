@@ -1,12 +1,12 @@
 package com.bishal.bulk.export.database.service.impl;
 
+import com.bishal.bulk.export.common.service.IExportServiceBeanFactoryTest;
 import com.bishal.bulk.export.database.initialize.IDatabaseCredentialInitializerService;
 import com.bishal.bulk.export.database.model.DatabaseCredentials;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,11 +25,14 @@ import reactor.test.StepVerifier;
 public class TestDatabaseCredentialDetailsServiceImplTests {
 
     @Autowired
-    private IDatabaseCredentialInitializerService databaseCredentialInitializerService;
+    private IExportServiceBeanFactoryTest exportServiceBeanFactoryTest;
 
     @Test
     public void fetchDatabaseCredentials_EnvironmentVariablesPresent_SuccessfullyFetchedDatabaseDetails(){
-        Mono<DatabaseCredentials> databaseCredentials = databaseCredentialInitializerService.getValidDatabaseCredentials();
+        Mono<DatabaseCredentials> databaseCredentials = exportServiceBeanFactoryTest
+                                                            .getDatabaseBeanFactoryTest()
+                                                            .getDatabaseCredentialInitializerService()
+                                                            .getValidDatabaseCredentials();
 
         StepVerifier.create(databaseCredentials)
                 .expectSubscription()

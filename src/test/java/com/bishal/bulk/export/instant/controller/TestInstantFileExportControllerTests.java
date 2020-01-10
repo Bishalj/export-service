@@ -1,11 +1,9 @@
 package com.bishal.bulk.export.instant.controller;
 
-
-import com.bishal.bulk.export.common.dao.ITestDataDao;
 import com.bishal.bulk.export.common.mapper.response.FileMetaDetailsResponse;
 import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
-import com.bishal.bulk.export.common.service.initialize.IDataExportRequestMapperInitializer;
-import com.bishal.bulk.export.instant.service.IFileExportMetaDataService;
+import com.bishal.bulk.export.common.service.IExportServiceBeanFactory;
+import com.bishal.bulk.export.common.service.IExportServiceBeanFactoryTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,23 +32,27 @@ public class TestInstantFileExportControllerTests {
     private WebTestClient webTestClient;
 
     @Autowired
-    private IFileExportMetaDataService fileExportMetaDataService;
+    private IExportServiceBeanFactory exportServiceBeanFactory;
 
     @Autowired
-    private ITestDataDao testDataDao;
+    private IExportServiceBeanFactoryTest exportServiceBeanFactoryTest;
 
-    @Autowired
-    private IDataExportRequestMapperInitializer dataExportRequestMapperInitializer;
 
 //    @Test
     public void getFileExportMetaDataFromDatabase(){
         try {
-            testDataDao.insertDummyData();
+            exportServiceBeanFactoryTest
+                    .getCommonBeanFactoryTest()
+                    .getTestDataDao()
+                    .insertDummyData();
 
         } catch (Exception e) {
             Assert.fail();
         }
-        final DataExportRequestMapper dataExportRequestMapper = dataExportRequestMapperInitializer.getValidRequestDataForEntireDataInCollection();
+        final DataExportRequestMapper dataExportRequestMapper = exportServiceBeanFactoryTest
+                                                                    .getInstantExportBeanFactoryTest()
+                                                                    .getDataExportRequestMapperInitializer()
+                                                                    .getValidRequestDataForEntireDataInCollection();
         Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux =
                 webTestClient.post()
                     .uri(EXPORT_DATA)
@@ -82,7 +84,10 @@ public class TestInstantFileExportControllerTests {
 
     @Test
     public void testGetFileExportNoContentTests(){
-        final DataExportRequestMapper dataExportRequestMapper = dataExportRequestMapperInitializer.getValidRequestDataForEntireDataInCollection();
+        final DataExportRequestMapper dataExportRequestMapper = exportServiceBeanFactoryTest
+                                                                    .getInstantExportBeanFactoryTest()
+                                                                    .getDataExportRequestMapperInitializer()
+                                                                    .getValidRequestDataForEntireDataInCollection();
                 webTestClient.post()
                         .uri(EXPORT_DATA)
                         .body(Mono.just(dataExportRequestMapper), DataExportRequestMapper.class)
@@ -97,7 +102,10 @@ public class TestInstantFileExportControllerTests {
                 webTestClient.post()
                         .uri(EXPORT_DATA)
                         .body(
-                                Mono.just(dataExportRequestMapperInitializer.getInvalidRequestData_NoQueryPresent()),
+                                Mono.just(exportServiceBeanFactoryTest
+                                            .getInstantExportBeanFactoryTest()
+                                            .getDataExportRequestMapperInitializer()
+                                            .getInvalidRequestData_NoQueryPresent()),
                                 DataExportRequestMapper.class
                         )
                         .accept(MediaType.valueOf(APPLICATION_JSON_VALUE))
@@ -111,7 +119,10 @@ public class TestInstantFileExportControllerTests {
         webTestClient.post()
                 .uri(EXPORT_DATA)
                 .body(
-                        Mono.just(dataExportRequestMapperInitializer.getInvalidRequestData_NoBatchSizePerFilePresent()),
+                        Mono.just(exportServiceBeanFactoryTest
+                                    .getInstantExportBeanFactoryTest()
+                                    .getDataExportRequestMapperInitializer()
+                                    .getInvalidRequestData_NoBatchSizePerFilePresent()),
                         DataExportRequestMapper.class
                 )
                 .accept(MediaType.valueOf(APPLICATION_JSON_VALUE))
@@ -125,7 +136,10 @@ public class TestInstantFileExportControllerTests {
         webTestClient.post()
                 .uri(EXPORT_DATA)
                 .body(
-                        Mono.just(dataExportRequestMapperInitializer.getInvalidRequestData_NoDatabaseUniqueKeyPresent()),
+                        Mono.just(exportServiceBeanFactoryTest
+                                    .getInstantExportBeanFactoryTest()
+                                    .getDataExportRequestMapperInitializer()
+                                    .getInvalidRequestData_NoDatabaseUniqueKeyPresent()),
                         DataExportRequestMapper.class
                 )
                 .accept(MediaType.valueOf(APPLICATION_JSON_VALUE))
@@ -139,7 +153,10 @@ public class TestInstantFileExportControllerTests {
         webTestClient.post()
                 .uri(EXPORT_DATA)
                 .body(
-                        Mono.just(dataExportRequestMapperInitializer.getInvalidRequestData_NoOrderedFieldPresent()),
+                        Mono.just(exportServiceBeanFactoryTest
+                                    .getInstantExportBeanFactoryTest()
+                                    .getDataExportRequestMapperInitializer()
+                                    .getInvalidRequestData_NoOrderedFieldPresent()),
                         DataExportRequestMapper.class
                 )
                 .accept(MediaType.valueOf(APPLICATION_JSON_VALUE))

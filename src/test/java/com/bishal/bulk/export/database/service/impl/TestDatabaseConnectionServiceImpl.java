@@ -2,17 +2,18 @@ package com.bishal.bulk.export.database.service.impl;
 
 
 import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
-import com.bishal.bulk.export.common.service.initialize.IDataExportRequestMapperInitializer;
+import com.bishal.bulk.export.common.service.IExportServiceBeanFactory;
+import com.bishal.bulk.export.common.service.IExportServiceBeanFactoryTest;
+import com.bishal.bulk.export.service.initialize.IDataExportRequestMapperInitializer;
 import com.bishal.bulk.export.common.utils.database.DatabaseConnectionStoreUtils;
 import com.bishal.bulk.export.database.initialize.IDatabaseCredentialInitializerService;
-import com.bishal.bulk.export.database.service.IDatabaseConnectionService;
-import com.bishal.bulk.export.database.service.IDatabaseCredentialService;
+import com.bishal.bulk.export.database.utils.DatabaseCredentialUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
@@ -28,25 +29,26 @@ import reactor.test.StepVerifier;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @EnableAutoConfiguration
 @ActiveProfiles("test")
+@PrepareForTest(DatabaseCredentialUtils.class)
 public class TestDatabaseConnectionServiceImpl {
 
     @Autowired
-    private IDatabaseConnectionService databaseConnectionService;
+    private IExportServiceBeanFactory exportServiceBeanFactory;
 
     @Autowired
-    private IDatabaseCredentialInitializerService databaseCredentialInitializerService;
+    private IExportServiceBeanFactoryTest exportServiceBeanFactoryTest;
 
-    @Autowired
-    private IDataExportRequestMapperInitializer dataExportRequestMapperInitializer;
-
-    @Autowired
-    private IDatabaseCredentialService databaseCredentialService;
 
     @Test
     public void setDatabaseConnectionClientInStore_ValidDatabaseConnectionClient_SuccessfullyStoredDatabaseConnectionClient(){
-        final DataExportRequestMapper dataExportRequestMapper = dataExportRequestMapperInitializer.getValidRequestDataForEntireDataInCollection();
+        final DataExportRequestMapper dataExportRequestMapper = exportServiceBeanFactoryTest
+                                                                    .getInstantExportBeanFactoryTest()
+                                                                    .getDataExportRequestMapperInitializer()
+                                                                    .getValidRequestDataForEntireDataInCollection();
 
-        Mono<ReactiveMongoTemplate> databaseConnectionClientStoreResponse = databaseCredentialService
+        Mono<ReactiveMongoTemplate> databaseConnectionClientStoreResponse = exportServiceBeanFactory
+                .getDatabaseBeanFactory()
+                .getDatabaseCredentialService()
                 .getDatabaseCredentialDetails(dataExportRequestMapper)
                 .flatMap( aDatabaseCredential -> DatabaseConnectionStoreUtils.getDatabaseConnectionFromDatabaseStore(aDatabaseCredential, dataExportRequestMapper.getDatabaseUniqueKey()));
 

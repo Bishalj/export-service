@@ -1,9 +1,8 @@
 package com.bishal.bulk.export.instant.service.impl;
 
-import com.bishal.bulk.export.common.dao.ITestDataDao;
 import com.bishal.bulk.export.common.mapper.response.FileMetaDetailsResponse;
-import com.bishal.bulk.export.common.service.initialize.IDataExportRequestMapperInitializer;
-import com.bishal.bulk.export.instant.service.IFileExportMetaDataService;
+import com.bishal.bulk.export.common.service.IExportServiceBeanFactory;
+import com.bishal.bulk.export.common.service.IExportServiceBeanFactoryTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,24 +20,29 @@ import reactor.test.StepVerifier;
 public class TestFileExportMetaDataServiceImplTest {
 
     @Autowired
-    private IFileExportMetaDataService fileExportMetaDataService;
+    private IExportServiceBeanFactory exportServiceBeanFactory;
 
     @Autowired
-    private IDataExportRequestMapperInitializer dataExportRequestMapperInitializer;
-
-    @Autowired
-    private ITestDataDao testDataDao;
+    private IExportServiceBeanFactoryTest exportServiceBeanFactoryTest;
 
 //    @Test
     public void testGetDetailOfFileContainingData() {
         try {
-            testDataDao.insertDummyData();
+            exportServiceBeanFactoryTest
+                    .getCommonBeanFactoryTest()
+                    .getTestDataDao()
+                    .insertDummyData();
         } catch (Exception e) {
             Assert.fail();
         }
-        final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = fileExportMetaDataService
+        final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = exportServiceBeanFactory
+                                                                        .getInstantExportBeanFactory()
+                                                                        .getFileExportMetaDataService()
                                                                         .getDetailOfFileContainingData(
-                                                                                dataExportRequestMapperInitializer.getValidRequestDataForEntireDataInCollection()
+                                                                                exportServiceBeanFactoryTest
+                                                                                    .getInstantExportBeanFactoryTest()
+                                                                                    .getDataExportRequestMapperInitializer()
+                                                                                    .getValidRequestDataForEntireDataInCollection()
                                                                         );
         StepVerifier.create(fileMetaDetailsResponseFlux)
                 .expectSubscription()
@@ -51,9 +55,14 @@ public class TestFileExportMetaDataServiceImplTest {
     }
 //    @Test
     public void testGetDetailOfFileContainingData_NoDataFound() {
-        final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = fileExportMetaDataService
+        final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = exportServiceBeanFactory
+                .getInstantExportBeanFactory()
+                .getFileExportMetaDataService()
                 .getDetailOfFileContainingData(
-                        dataExportRequestMapperInitializer.getValidRequestDataForEntireDataInCollection()
+                        exportServiceBeanFactoryTest
+                                .getInstantExportBeanFactoryTest()
+                                .getDataExportRequestMapperInitializer()
+                                .getValidRequestDataForEntireDataInCollection()
                 ).log();
         StepVerifier.create(fileMetaDetailsResponseFlux)
                 .expectSubscription()
@@ -67,9 +76,14 @@ public class TestFileExportMetaDataServiceImplTest {
 
     @Test
     public void getFileDetails_InvalidRequestDataWithoutQuery() {
-        final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = fileExportMetaDataService
+        final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = exportServiceBeanFactory
+                .getInstantExportBeanFactory()
+                .getFileExportMetaDataService()
                 .getDetailOfFileContainingData(
-                        dataExportRequestMapperInitializer.getInvalidRequestData_NoQueryPresent()
+                        exportServiceBeanFactoryTest
+                                .getInstantExportBeanFactoryTest()
+                                .getDataExportRequestMapperInitializer()
+                                .getInvalidRequestData_NoQueryPresent()
                 ).log();
 
         StepVerifier.create(fileMetaDetailsResponseFlux)
@@ -81,9 +95,14 @@ public class TestFileExportMetaDataServiceImplTest {
     @Test
     public void getFileDetails_InvalidRequestDataWithoutBatchSizePerFileFiled() {
 
-        final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = fileExportMetaDataService
+        final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = exportServiceBeanFactory
+                .getInstantExportBeanFactory()
+                .getFileExportMetaDataService()
                 .getDetailOfFileContainingData(
-                        dataExportRequestMapperInitializer.getInvalidRequestData_NoBatchSizePerFilePresent()
+                        exportServiceBeanFactoryTest
+                                .getInstantExportBeanFactoryTest()
+                                .getDataExportRequestMapperInitializer()
+                                .getInvalidRequestData_NoBatchSizePerFilePresent()
                 ).log();
 
         StepVerifier.create(fileMetaDetailsResponseFlux)
@@ -95,9 +114,14 @@ public class TestFileExportMetaDataServiceImplTest {
     @Test
     public void getFileDetails_InvalidRequestDataWithoutNoDatabaseUniqueKeyFiled() {
 
-        final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = fileExportMetaDataService
+        final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = exportServiceBeanFactory
+                .getInstantExportBeanFactory()
+                .getFileExportMetaDataService()
                 .getDetailOfFileContainingData(
-                        dataExportRequestMapperInitializer.getInvalidRequestData_NoDatabaseUniqueKeyPresent()
+                        exportServiceBeanFactoryTest
+                                .getInstantExportBeanFactoryTest()
+                                .getDataExportRequestMapperInitializer()
+                                .getInvalidRequestData_NoDatabaseUniqueKeyPresent()
                 ).log();
 
         StepVerifier.create(fileMetaDetailsResponseFlux)
@@ -109,9 +133,14 @@ public class TestFileExportMetaDataServiceImplTest {
     @Test
     public void getFileDetails_InvalidRequestDataWithoutNoOrderedField() {
 
-        final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = fileExportMetaDataService
+        final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = exportServiceBeanFactory
+                .getInstantExportBeanFactory()
+                .getFileExportMetaDataService()
                 .getDetailOfFileContainingData(
-                        dataExportRequestMapperInitializer.getInvalidRequestData_NoOrderedFieldPresent()
+                        exportServiceBeanFactoryTest
+                                .getInstantExportBeanFactoryTest()
+                                .getDataExportRequestMapperInitializer()
+                                .getInvalidRequestData_NoOrderedFieldPresent()
                 ).log();
 
         StepVerifier.create(fileMetaDetailsResponseFlux)

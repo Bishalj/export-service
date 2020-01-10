@@ -16,7 +16,8 @@
 
 	<properties>
 		<java.version>11</java.version>
-			<integration.test.target>${project.build.directory}/jacoco.exec</integration.test.target>
+		<integration.test.target>${project.build.directory}/jacoco.exec</integration.test.target>
+		<powermock.version>2.0.0</powermock.version>
 	</properties>
 
 	<dependencies>
@@ -88,7 +89,28 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-test</artifactId>
 		</dependency>
-
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-module-junit4</artifactId>
+				<version>${powermock.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-api-mockito2</artifactId>
+				<version>${powermock.version}</version>
+				<scope>test</scope>
+			</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>RELEASE</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
 
 	</dependencies>
 

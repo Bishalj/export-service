@@ -20,13 +20,17 @@ public class DatabaseCredentialUtils {
     @Value("${env.database.password}")
     private String passwordEnvironemntVariableKey;
 
-    public Mono<DatabaseCredentials> getDatabaseCredential(final String databaseUniqueKey){
+    public Mono<DatabaseCredentials> getDatabaseCredential(final String databaseUniqueKey) {
+        try {
             final DatabaseCredentials databaseCredentials = new DatabaseCredentials();
             databaseCredentials.setHostUrl(fetchDatabaseHostUrl(databaseUniqueKey));
             databaseCredentials.setPortNumber(fetchDatabasePortNumber(databaseUniqueKey));
             databaseCredentials.setUsername(fetchDatabaseUsername(databaseUniqueKey));
             databaseCredentials.setPassword(fetchDatabasePassword(databaseUniqueKey));
             return Mono.just(databaseCredentials);
+        }catch (Exception ex){
+            return Mono.error(ex);
+        }
     }
 
 
@@ -37,7 +41,7 @@ public class DatabaseCredentialUtils {
 
     private Integer fetchDatabasePortNumber(final String databaseUniqueKey){
         final String DATABASE_PORT_NUMBER_KEY = String.format(portNumberEnvironemntVariableKey, databaseUniqueKey);
-        return Integer.valueOf(getDataFromEnvironmentVariable(DATABASE_PORT_NUMBER_KEY));
+        return getDataFromEnvironmentVariable(DATABASE_PORT_NUMBER_KEY) == null ? null : Integer.valueOf(getDataFromEnvironmentVariable(DATABASE_PORT_NUMBER_KEY));
     }
 
     private String fetchDatabaseUsername(final String databaseUniqueKey){

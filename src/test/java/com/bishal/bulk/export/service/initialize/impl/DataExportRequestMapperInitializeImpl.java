@@ -1,7 +1,7 @@
-package com.bishal.bulk.export.common.service.initialize.impl;
+package com.bishal.bulk.export.service.initialize.impl;
 
 import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
-import com.bishal.bulk.export.common.service.initialize.IDataExportRequestMapperInitializer;
+import com.bishal.bulk.export.service.initialize.IDataExportRequestMapperInitializer;
 import org.springframework.stereotype.Service;
 
 @Service
