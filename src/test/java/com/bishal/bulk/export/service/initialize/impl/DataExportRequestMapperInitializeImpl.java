@@ -14,6 +14,7 @@ public class DataExportRequestMapperInitializeImpl implements IDataExportRequest
         dataExportRequestMapper.setDatabaseQuery("{}");
         dataExportRequestMapper.setDatabaseUniqueKey("LOCAL");
         dataExportRequestMapper.setIsDataNeedsToBeOrdered(false);
+        dataExportRequestMapper.setDatabaseName("TodoList");
         return dataExportRequestMapper;
     }
 
@@ -23,6 +24,7 @@ public class DataExportRequestMapperInitializeImpl implements IDataExportRequest
         dataExportRequestMapper.setDatabaseQuery("{}");
         dataExportRequestMapper.setDatabaseUniqueKey("LOCAL");
         dataExportRequestMapper.setIsDataNeedsToBeOrdered(false);
+        dataExportRequestMapper.setDatabaseName("TodoList");
         return dataExportRequestMapper;
     }
 
@@ -32,6 +34,7 @@ public class DataExportRequestMapperInitializeImpl implements IDataExportRequest
         dataExportRequestMapper.setBatchSizePerFile(100000l);
         dataExportRequestMapper.setDatabaseQuery("{}");
         dataExportRequestMapper.setIsDataNeedsToBeOrdered(false);
+        dataExportRequestMapper.setDatabaseName("TodoList");
         return dataExportRequestMapper;
     }
 
@@ -41,6 +44,7 @@ public class DataExportRequestMapperInitializeImpl implements IDataExportRequest
         dataExportRequestMapper.setBatchSizePerFile(100000l);
         dataExportRequestMapper.setDatabaseUniqueKey("LOCAL");
         dataExportRequestMapper.setIsDataNeedsToBeOrdered(false);
+        dataExportRequestMapper.setDatabaseName("TodoList");
         return dataExportRequestMapper;
     }
 
@@ -50,6 +54,23 @@ public class DataExportRequestMapperInitializeImpl implements IDataExportRequest
         dataExportRequestMapper.setBatchSizePerFile(100000l);
         dataExportRequestMapper.setDatabaseQuery("{}");
         dataExportRequestMapper.setDatabaseUniqueKey("LOCAL");
+        dataExportRequestMapper.setDatabaseName("TodoList");
         return dataExportRequestMapper;
+    }
+
+    @Override
+    public DataExportRequestMapper getInvalidRequestData_NoDatabaseNamePresent() {
+
+        final DataExportRequestMapper dataExportRequestMapper = new DataExportRequestMapper();
+        dataExportRequestMapper.setBatchSizePerFile(100000l);
+        dataExportRequestMapper.setDatabaseQuery("{}");
+        dataExportRequestMapper.setDatabaseUniqueKey("LOCAL");
+        dataExportRequestMapper.setIsDataNeedsToBeOrdered(false);
+        return dataExportRequestMapper;
+    }
+
+    @Override
+    public DataExportRequestMapper getInvalidRequestData_NoRequestDataPresent() {
+        return null;
     }
 }

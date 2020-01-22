@@ -11,6 +11,8 @@ public class DataExportRequestMapper {
 
     private String databaseUniqueKey;
 
+    private String databaseName;
+
     private Long batchSizePerFile;
 
     private Boolean isDataNeedsToBeOrdered;
@@ -45,5 +47,13 @@ public class DataExportRequestMapper {
 
     public void setIsDataNeedsToBeOrdered(Boolean dataNeedsToBeOrdered) {
         isDataNeedsToBeOrdered = dataNeedsToBeOrdered;
+    }
+
+    public String getDatabaseName() {
+        return databaseName;
+    }
+
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
     }
 }

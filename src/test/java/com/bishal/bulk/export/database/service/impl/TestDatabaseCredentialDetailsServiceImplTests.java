@@ -1,10 +1,14 @@
 package com.bishal.bulk.export.database.service.impl;
 
+import com.bishal.bulk.export.common.exception.NoDataFoundException;
+import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
+import com.bishal.bulk.export.common.service.IExportServiceBeanFactory;
 import com.bishal.bulk.export.common.service.IExportServiceBeanFactoryTest;
-import com.bishal.bulk.export.database.initialize.IDatabaseCredentialInitializerService;
 import com.bishal.bulk.export.database.model.DatabaseCredentials;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -19,7 +23,7 @@ import reactor.test.StepVerifier;
 @RunWith(SpringRunner.class)
 @AutoConfigureWebTestClient
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @EnableAutoConfiguration
 @ActiveProfiles("test")
 public class TestDatabaseCredentialDetailsServiceImplTests {
@@ -27,8 +31,15 @@ public class TestDatabaseCredentialDetailsServiceImplTests {
     @Autowired
     private IExportServiceBeanFactoryTest exportServiceBeanFactoryTest;
 
+    @Autowired
+    private IExportServiceBeanFactory exportServiceBeanFactory;
+
+    @Rule
+    private final EnvironmentVariables environmentVariables
+            = new EnvironmentVariables();
+
     @Test
-    public void fetchDatabaseCredentials_EnvironmentVariablesPresent_SuccessfullyFetchedDatabaseDetails(){
+    public void fetchDatabaseCredentials_NoEnvironmentVariablesPresent_FailedToFetchedDatabaseDetails(){
         Mono<DatabaseCredentials> databaseCredentials = exportServiceBeanFactoryTest
                                                             .getDatabaseBeanFactoryTest()
                                                             .getDatabaseCredentialInitializerService()
@@ -36,24 +47,113 @@ public class TestDatabaseCredentialDetailsServiceImplTests {
 
         StepVerifier.create(databaseCredentials)
                 .expectSubscription()
-                .consumeNextWith( databaseCredentialDetails -> isDatabaseCredentialDetailsValid(databaseCredentialDetails))
-                .verifyComplete();
+                .expectError(NoDataFoundException.class)
+                .verify();
     }
 
-//    @Test
-//    public void fetchDatabaseCredentialsTest_EnvironmentVariablesNotPresent_failedFetchingDatabaseDetails(){
-//        System.out.println("************************************** " + hostUrlEnvironemntVariableKey + " ***************************************");
-//        Mono<DatabaseCredentials> databaseCredentials = databaseCredentialService
-//                .getDatabaseCredentialDetails(
-//                        dataExportRequestMapperInitializer.getValidRequestDataForEntireDataInCollection()
-//                );
-//
-//        StepVerifier.create(databaseCredentials)
-//                .expectError(NoDataFoundException.class)
-//                .verify();
-//
-//
-//    }
+
+    @Test
+    public void setDatabaseConnectionClientInStore_ValidDatabaseConnectionClient_SuccessfullyStoredDatabaseConnectionClient(){
+        environmentVariables.set("DATABASE_PORT_LOCAL", "27017");
+        environmentVariables.set("DATABASE_USERNAME_LOCAL", "bishal");
+        environmentVariables.set("DATABASE_PASSWORD_LOCAL", "bishal");
+        environmentVariables.set("DATABASE_HOST_URL_LOCAL", "localhost");
+        final DataExportRequestMapper dataExportRequestMapper = exportServiceBeanFactoryTest
+                .getInstantExportBeanFactoryTest()
+                .getDataExportRequestMapperInitializer()
+                .getValidRequestDataForEntireDataInCollection();
+
+        Mono<DatabaseCredentials> databaseCredentialDetails = exportServiceBeanFactory
+                .getDatabaseBeanFactory()
+                .getDatabaseCredentialService()
+                .getDatabaseCredentialDetails(dataExportRequestMapper);
+
+        StepVerifier.create(databaseCredentialDetails)
+                .expectSubscription()
+                .expectError()
+                .verify();
+    }
+
+    @Test
+    public void setDatabaseConnectionClientInStore_InvalidDatabaseConnectionClient_PortNotPresent(){
+        environmentVariables.set("DATABASE_USERNAME_LOCAL", "bishal");
+        environmentVariables.set("DATABASE_PASSWORD_LOCAL", "bishal");
+        environmentVariables.set("DATABASE_HOST_URL_LOCAL", "localhost");
+        final DataExportRequestMapper dataExportRequestMapper = exportServiceBeanFactoryTest
+                .getInstantExportBeanFactoryTest()
+                .getDataExportRequestMapperInitializer()
+                .getValidRequestDataForEntireDataInCollection();
+
+        Mono<DatabaseCredentials> databaseCredentialDetails = exportServiceBeanFactory
+                .getDatabaseBeanFactory()
+                .getDatabaseCredentialService()
+                .getDatabaseCredentialDetails(dataExportRequestMapper);
+
+        StepVerifier.create(databaseCredentialDetails)
+                .expectSubscription()
+                .expectError()
+                .verify();
+    }
+    @Test
+    public void setDatabaseConnectionClientInStore_InvalidDatabaseConnectionClient_UsernameEnvironmentVariableNotPresent(){
+        environmentVariables.set("DATABASE_PORT_LOCAL", "27017");
+        environmentVariables.set("DATABASE_PASSWORD_LOCAL", "bishal");
+        environmentVariables.set("DATABASE_HOST_URL_LOCAL", "localhost");
+        final DataExportRequestMapper dataExportRequestMapper = exportServiceBeanFactoryTest
+                .getInstantExportBeanFactoryTest()
+                .getDataExportRequestMapperInitializer()
+                .getValidRequestDataForEntireDataInCollection();
+
+        Mono<DatabaseCredentials> databaseCredentialDetails = exportServiceBeanFactory
+                .getDatabaseBeanFactory()
+                .getDatabaseCredentialService()
+                .getDatabaseCredentialDetails(dataExportRequestMapper);
+
+        StepVerifier.create(databaseCredentialDetails)
+                .expectSubscription()
+                .expectError()
+                .verify();
+    }
+    @Test
+    public void setDatabaseConnectionClientInStore_InvalidDatabaseConnectionClient_PasswordEnvironmentVariableNotPresent(){
+        environmentVariables.set("DATABASE_PORT_LOCAL", "27017");
+        environmentVariables.set("DATABASE_USERNAME_LOCAL", "bishal");
+        environmentVariables.set("DATABASE_HOST_URL_LOCAL", "localhost");
+        final DataExportRequestMapper dataExportRequestMapper = exportServiceBeanFactoryTest
+                .getInstantExportBeanFactoryTest()
+                .getDataExportRequestMapperInitializer()
+                .getValidRequestDataForEntireDataInCollection();
+
+        Mono<DatabaseCredentials> databaseCredentialDetails = exportServiceBeanFactory
+                .getDatabaseBeanFactory()
+                .getDatabaseCredentialService()
+                .getDatabaseCredentialDetails(dataExportRequestMapper);
+
+        StepVerifier.create(databaseCredentialDetails)
+                .expectSubscription()
+                .expectError()
+                .verify();
+    }
+    @Test
+    public void setDatabaseConnectionClientInStore_InvalidDatabaseConnectionClient_HostUrlEnvironmentVariableNotPresent(){
+        environmentVariables.set("DATABASE_PORT_LOCAL", "27017");
+        environmentVariables.set("DATABASE_USERNAME_LOCAL", "bishal");
+        environmentVariables.set("DATABASE_PASSWORD_LOCAL", "bishal");
+        final DataExportRequestMapper dataExportRequestMapper = exportServiceBeanFactoryTest
+                .getInstantExportBeanFactoryTest()
+                .getDataExportRequestMapperInitializer()
+                .getValidRequestDataForEntireDataInCollection();
+
+        Mono<DatabaseCredentials> databaseCredentialDetails = exportServiceBeanFactory
+                .getDatabaseBeanFactory()
+                .getDatabaseCredentialService()
+                .getDatabaseCredentialDetails(dataExportRequestMapper);
+
+        StepVerifier.create(databaseCredentialDetails)
+                .expectSubscription()
+                .expectError()
+                .verify();
+    }
 
     private void isDatabaseCredentialDetailsValid(final DatabaseCredentials databaseCredentials) {
         Assert.assertNotNull(databaseCredentials);

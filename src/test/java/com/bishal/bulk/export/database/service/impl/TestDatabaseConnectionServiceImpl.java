@@ -4,12 +4,12 @@ package com.bishal.bulk.export.database.service.impl;
 import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
 import com.bishal.bulk.export.common.service.IExportServiceBeanFactory;
 import com.bishal.bulk.export.common.service.IExportServiceBeanFactoryTest;
-import com.bishal.bulk.export.service.initialize.IDataExportRequestMapperInitializer;
 import com.bishal.bulk.export.common.utils.database.DatabaseConnectionStoreUtils;
-import com.bishal.bulk.export.database.initialize.IDatabaseCredentialInitializerService;
 import com.bishal.bulk.export.database.utils.DatabaseCredentialUtils;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,23 +38,31 @@ public class TestDatabaseConnectionServiceImpl {
     @Autowired
     private IExportServiceBeanFactoryTest exportServiceBeanFactoryTest;
 
+    @Rule
+    public final EnvironmentVariables environmentVariables
+            = new EnvironmentVariables();
+
 
     @Test
     public void setDatabaseConnectionClientInStore_ValidDatabaseConnectionClient_SuccessfullyStoredDatabaseConnectionClient(){
+        environmentVariables.set("DATABASE_PORT_LOCAL", "27017");
+        environmentVariables.set("DATABASE_USERNAME_LOCAL", "bishal");
+        environmentVariables.set("DATABASE_PASSWORD_LOCAL", "bishal");
+        environmentVariables.set("DATABASE_HOST_URL_LOCAL", "localhost");
         final DataExportRequestMapper dataExportRequestMapper = exportServiceBeanFactoryTest
-                                                                    .getInstantExportBeanFactoryTest()
-                                                                    .getDataExportRequestMapperInitializer()
-                                                                    .getValidRequestDataForEntireDataInCollection();
+                .getInstantExportBeanFactoryTest()
+                .getDataExportRequestMapperInitializer()
+                .getValidRequestDataForEntireDataInCollection();
 
         Mono<ReactiveMongoTemplate> databaseConnectionClientStoreResponse = exportServiceBeanFactory
                 .getDatabaseBeanFactory()
                 .getDatabaseCredentialService()
                 .getDatabaseCredentialDetails(dataExportRequestMapper)
-                .flatMap( aDatabaseCredential -> DatabaseConnectionStoreUtils.getDatabaseConnectionFromDatabaseStore(aDatabaseCredential, dataExportRequestMapper.getDatabaseUniqueKey()));
+                .map( aDatabaseCredential -> DatabaseConnectionStoreUtils.getDatabaseConnectionFromDatabaseStore(aDatabaseCredential, dataExportRequestMapper.getDatabaseUniqueKey()));
 
         StepVerifier.create(databaseConnectionClientStoreResponse)
-                    .expectSubscription()
-                    .consumeRecordedWith( reactiveMongoTemplate -> Assert.assertNotNull(reactiveMongoTemplate))
-                    .verifyComplete();
+                .expectSubscription()
+                .consumeNextWith(reactiveMongoTemplate -> Assert.assertNotNull(reactiveMongoTemplate))
+                .verifyComplete();
     }
 }

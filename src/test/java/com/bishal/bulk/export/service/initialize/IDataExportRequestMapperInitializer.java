@@ -13,4 +13,8 @@ public interface IDataExportRequestMapperInitializer {
     DataExportRequestMapper getInvalidRequestData_NoDatabaseUniqueKeyPresent();
 
     DataExportRequestMapper getInvalidRequestData_NoOrderedFieldPresent();
+
+    DataExportRequestMapper getInvalidRequestData_NoDatabaseNamePresent();
+
+    DataExportRequestMapper getInvalidRequestData_NoRequestDataPresent();
 }

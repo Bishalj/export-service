@@ -111,6 +111,12 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.github.stefanbirkner</groupId>
+			<artifactId>system-rules</artifactId>
+			<version>1.16.0</version>
+		</dependency>
+		<!-- Thanks for using https://jar-download.com -->
 
 	</dependencies>
 

@@ -1,5 +1,6 @@
 package com.bishal.bulk.export.instant.service.impl;
 
+import com.bishal.bulk.export.common.exception.NoDataFoundException;
 import com.bishal.bulk.export.common.mapper.response.FileMetaDetailsResponse;
 import com.bishal.bulk.export.common.service.IExportServiceBeanFactory;
 import com.bishal.bulk.export.common.service.IExportServiceBeanFactoryTest;
@@ -16,7 +17,7 @@ import reactor.test.StepVerifier;
 @RunWith(SpringRunner.class)
 @AutoConfigureWebTestClient
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class TestFileExportMetaDataServiceImplTest {
 
     @Autowired
@@ -141,6 +142,44 @@ public class TestFileExportMetaDataServiceImplTest {
                                 .getInstantExportBeanFactoryTest()
                                 .getDataExportRequestMapperInitializer()
                                 .getInvalidRequestData_NoOrderedFieldPresent()
+                ).log();
+
+        StepVerifier.create(fileMetaDetailsResponseFlux)
+                .expectSubscription()
+                .expectError(IllegalArgumentException.class)
+                .verify();
+    }
+
+    @Test
+    public void getFileDetails_InvalidRequestDataWithoutDatabaseName() {
+
+        final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = exportServiceBeanFactory
+                .getInstantExportBeanFactory()
+                .getFileExportMetaDataService()
+                .getDetailOfFileContainingData(
+                        exportServiceBeanFactoryTest
+                                .getInstantExportBeanFactoryTest()
+                                .getDataExportRequestMapperInitializer()
+                                .getInvalidRequestData_NoDatabaseNamePresent()
+                ).log();
+
+        StepVerifier.create(fileMetaDetailsResponseFlux)
+                .expectSubscription()
+                .expectError(IllegalArgumentException.class)
+                .verify();
+    }
+
+    @Test
+    public void getFileDetails_InvalidRequestData_WithNullData() {
+
+        final Flux<FileMetaDetailsResponse> fileMetaDetailsResponseFlux = exportServiceBeanFactory
+                .getInstantExportBeanFactory()
+                .getFileExportMetaDataService()
+                .getDetailOfFileContainingData(
+                        exportServiceBeanFactoryTest
+                                .getInstantExportBeanFactoryTest()
+                                .getDataExportRequestMapperInitializer()
+                                .getInvalidRequestData_NoRequestDataPresent()
                 ).log();
 
         StepVerifier.create(fileMetaDetailsResponseFlux)

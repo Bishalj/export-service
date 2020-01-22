@@ -24,7 +24,7 @@ public class DatabaseCredentialServiceImpl implements IDatabaseCredentialService
         final Mono<DatabaseCredentials> databaseCredentialMono = exportServiceBeanFactory
                                                                     .getDatabaseBeanFactory()
                                                                     .getDatabaseCredentialUtils()
-                                                                    .getDatabaseCredential(dataExportRequestMapper.getDatabaseUniqueKey());
+                                                                    .getDatabaseCredential(dataExportRequestMapper.getDatabaseUniqueKey(), dataExportRequestMapper.getDatabaseName());
         return databaseCredentialMono
                 .flatMap(databaseCredential -> processDatabaseCredentials(databaseCredential));
 
@@ -32,7 +32,7 @@ public class DatabaseCredentialServiceImpl implements IDatabaseCredentialService
 
     private Mono<DatabaseCredentials> processDatabaseCredentials(DatabaseCredentials databaseCredential) {
         if(isDatabaseCredentialsInvalid(databaseCredential))
-            return  Mono.error(new NoDataFoundException("Invalid database credentials"));
+            return Mono.error(new NoDataFoundException("Invalid database credentials"));
         return Mono.just(databaseCredential);
     }
 
