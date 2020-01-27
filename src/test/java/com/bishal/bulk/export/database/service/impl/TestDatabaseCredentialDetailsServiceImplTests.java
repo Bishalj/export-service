@@ -35,7 +35,7 @@ public class TestDatabaseCredentialDetailsServiceImplTests {
     private IExportServiceBeanFactory exportServiceBeanFactory;
 
     @Rule
-    private final EnvironmentVariables environmentVariables
+    public final EnvironmentVariables environmentVariables
             = new EnvironmentVariables();
 
     @Test
@@ -70,8 +70,8 @@ public class TestDatabaseCredentialDetailsServiceImplTests {
 
         StepVerifier.create(databaseCredentialDetails)
                 .expectSubscription()
-                .expectError()
-                .verify();
+                .consumeNextWith(databaseCredentialDetail -> isDatabaseCredentialDetailsValid(databaseCredentialDetail))
+                .verifyComplete();
     }
 
     @Test
