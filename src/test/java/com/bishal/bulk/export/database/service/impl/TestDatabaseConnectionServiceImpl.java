@@ -7,7 +7,7 @@ import com.bishal.bulk.export.common.service.IExportServiceBeanFactoryTest;
 import com.bishal.bulk.export.common.utils.database.DatabaseConnectionStoreUtils;
 import com.bishal.bulk.export.database.utils.DatabaseCredentialUtils;
 import org.junit.Assert;
-import org.junit.Rule;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import org.junit.runner.RunWith;
@@ -22,6 +22,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import javax.validation.Valid;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureWebTestClient
@@ -38,8 +40,9 @@ public class TestDatabaseConnectionServiceImpl {
     @Autowired
     private IExportServiceBeanFactoryTest exportServiceBeanFactoryTest;
 
-    @Rule
-    public final EnvironmentVariables environmentVariables
+
+    @ClassRule
+    public final static EnvironmentVariables environmentVariables
             = new EnvironmentVariables();
 
 
