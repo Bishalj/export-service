@@ -4,10 +4,9 @@ import com.bishal.bulk.export.common.exception.NoDataFoundException;
 import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
 import com.bishal.bulk.export.common.service.IExportServiceBeanFactory;
 import com.bishal.bulk.export.common.service.IExportServiceBeanFactoryTest;
-import com.bishal.bulk.export.database.model.DatabaseCredentials;
+import com.bishal.bulk.export.database.model.DatabaseCredential;
 import org.junit.Assert;
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import org.junit.runner.RunWith;
@@ -18,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -41,9 +39,10 @@ public class TestDatabaseCredentialDetailsServiceImplTests {
     public final static EnvironmentVariables environmentVariables
             = new EnvironmentVariables();
 
+
     @Test
     public void fetchDatabaseCredentials_NoEnvironmentVariablesPresent_FailedToFetchedDatabaseDetails(){
-        Mono<DatabaseCredentials> databaseCredentials = exportServiceBeanFactoryTest
+        Mono<DatabaseCredential> databaseCredentials = exportServiceBeanFactoryTest
                                                             .getDatabaseBeanFactoryTest()
                                                             .getDatabaseCredentialInitializerService()
                                                             .getValidDatabaseCredentials();
@@ -66,7 +65,7 @@ public class TestDatabaseCredentialDetailsServiceImplTests {
 //                .getDataExportRequestMapperInitializer()
 //                .getValidRequestDataForEntireDataInCollection();
 //
-//        Mono<DatabaseCredentials> databaseCredentialDetails = exportServiceBeanFactory
+//        Mono<DatabaseCredential> databaseCredentialDetails = exportServiceBeanFactory
 //                .getDatabaseBeanFactory()
 //                .getDatabaseCredentialService()
 //                .getDatabaseCredentialDetails(dataExportRequestMapper);
@@ -87,7 +86,7 @@ public class TestDatabaseCredentialDetailsServiceImplTests {
                 .getDataExportRequestMapperInitializer()
                 .getValidRequestDataForEntireDataInCollection();
 
-        Mono<DatabaseCredentials> databaseCredentialDetails = exportServiceBeanFactory
+        Mono<DatabaseCredential> databaseCredentialDetails = exportServiceBeanFactory
                 .getDatabaseBeanFactory()
                 .getDatabaseCredentialService()
                 .getDatabaseCredentialDetails(dataExportRequestMapper);
@@ -107,7 +106,7 @@ public class TestDatabaseCredentialDetailsServiceImplTests {
                 .getDataExportRequestMapperInitializer()
                 .getValidRequestDataForEntireDataInCollection();
 
-        Mono<DatabaseCredentials> databaseCredentialDetails = exportServiceBeanFactory
+        Mono<DatabaseCredential> databaseCredentialDetails = exportServiceBeanFactory
                 .getDatabaseBeanFactory()
                 .getDatabaseCredentialService()
                 .getDatabaseCredentialDetails(dataExportRequestMapper);
@@ -127,7 +126,7 @@ public class TestDatabaseCredentialDetailsServiceImplTests {
                 .getDataExportRequestMapperInitializer()
                 .getValidRequestDataForEntireDataInCollection();
 
-        Mono<DatabaseCredentials> databaseCredentialDetails = exportServiceBeanFactory
+        Mono<DatabaseCredential> databaseCredentialDetails = exportServiceBeanFactory
                 .getDatabaseBeanFactory()
                 .getDatabaseCredentialService()
                 .getDatabaseCredentialDetails(dataExportRequestMapper);
@@ -147,7 +146,7 @@ public class TestDatabaseCredentialDetailsServiceImplTests {
                 .getDataExportRequestMapperInitializer()
                 .getValidRequestDataForEntireDataInCollection();
 
-        Mono<DatabaseCredentials> databaseCredentialDetails = exportServiceBeanFactory
+        Mono<DatabaseCredential> databaseCredentialDetails = exportServiceBeanFactory
                 .getDatabaseBeanFactory()
                 .getDatabaseCredentialService()
                 .getDatabaseCredentialDetails(dataExportRequestMapper);
@@ -158,12 +157,12 @@ public class TestDatabaseCredentialDetailsServiceImplTests {
                 .verify();
     }
 
-    private void isDatabaseCredentialDetailsValid(final DatabaseCredentials databaseCredentials) {
-        Assert.assertNotNull(databaseCredentials);
-        Assert.assertNotNull(databaseCredentials.getHostUrl());
-        Assert.assertNotNull(databaseCredentials.getPortNumber());
-        Assert.assertNotNull(databaseCredentials.getUsername());
-        Assert.assertNotNull(databaseCredentials.getPassword());
+    private void isDatabaseCredentialDetailsValid(final DatabaseCredential databaseCredential) {
+        Assert.assertNotNull(databaseCredential);
+        Assert.assertNotNull(databaseCredential.getHostUrl());
+        Assert.assertNotNull(databaseCredential.getPortNumber());
+        Assert.assertNotNull(databaseCredential.getUsername());
+        Assert.assertNotNull(databaseCredential.getPassword());
     }
 
 

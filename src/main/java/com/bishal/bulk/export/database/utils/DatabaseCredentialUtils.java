@@ -1,6 +1,6 @@
 package com.bishal.bulk.export.database.utils;
 
-import com.bishal.bulk.export.database.model.DatabaseCredentials;
+import com.bishal.bulk.export.database.model.DatabaseCredential;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -20,15 +20,15 @@ public class DatabaseCredentialUtils {
     @Value("${env.database.password}")
     private String passwordEnvironemntVariableKey;
 
-    public Mono<DatabaseCredentials> getDatabaseCredential(final String databaseUniqueKey, final String databaseName) {
+    public Mono<DatabaseCredential> getDatabaseCredential(final String databaseUniqueKey, final String databaseName) {
         try {
-            final DatabaseCredentials databaseCredentials = new DatabaseCredentials();
-            databaseCredentials.setHostUrl(fetchDatabaseHostUrl(databaseUniqueKey));
-            databaseCredentials.setPortNumber(fetchDatabasePortNumber(databaseUniqueKey));
-            databaseCredentials.setUsername(fetchDatabaseUsername(databaseUniqueKey));
-            databaseCredentials.setPassword(fetchDatabasePassword(databaseUniqueKey));
-            databaseCredentials.setDatabaseName(databaseName);
-            return Mono.just(databaseCredentials);
+            final DatabaseCredential databaseCredential = new DatabaseCredential();
+            databaseCredential.setHostUrl(fetchDatabaseHostUrl(databaseUniqueKey));
+            databaseCredential.setPortNumber(fetchDatabasePortNumber(databaseUniqueKey));
+            databaseCredential.setUsername(fetchDatabaseUsername(databaseUniqueKey));
+            databaseCredential.setPassword(fetchDatabasePassword(databaseUniqueKey));
+            databaseCredential.setDatabaseName(databaseName);
+            return Mono.just(databaseCredential);
         }catch (Exception ex){
             return Mono.error(ex);
         }
@@ -55,7 +55,7 @@ public class DatabaseCredentialUtils {
         return getDataFromEnvironmentVariable(DATABASE_PASSWORD_KEY);
     }
 
-    private String getDataFromEnvironmentVariable(final String environmentVariableKey){
+    public String getDataFromEnvironmentVariable(final String environmentVariableKey){
         return System.getenv(environmentVariableKey);
     }
 }

@@ -4,7 +4,7 @@ import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
 import com.bishal.bulk.export.common.service.IExportServiceBeanFactory;
 import com.bishal.bulk.export.common.service.IExportServiceBeanFactoryTest;
 import com.bishal.bulk.export.database.initialize.IDatabaseCredentialInitializerService;
-import com.bishal.bulk.export.database.model.DatabaseCredentials;
+import com.bishal.bulk.export.database.model.DatabaseCredential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -19,8 +19,8 @@ public class DatabaseCredentialInitializerServiceImpl implements IDatabaseCreden
     private IExportServiceBeanFactoryTest exportServiceBeanFactoryTest;
 
     @Override
-    public Mono<DatabaseCredentials> getValidDatabaseCredentials() {
-        Mono<DatabaseCredentials> databaseCredentials = getDatabaseCredentials(
+    public Mono<DatabaseCredential> getValidDatabaseCredentials() {
+        Mono<DatabaseCredential> databaseCredentials = getDatabaseCredentials(
                                                                     exportServiceBeanFactoryTest
                                                                         .getInstantExportBeanFactoryTest()
                                                                         .getDataExportRequestMapperInitializer()
@@ -30,8 +30,8 @@ public class DatabaseCredentialInitializerServiceImpl implements IDatabaseCreden
     }
 
     @Override
-    public Mono<DatabaseCredentials> getDatabaseCredentials(final DataExportRequestMapper dataExportRequestMapper) {
-        Mono<DatabaseCredentials> databaseCredentials = exportServiceBeanFactory
+    public Mono<DatabaseCredential> getDatabaseCredentials(final DataExportRequestMapper dataExportRequestMapper) {
+        Mono<DatabaseCredential> databaseCredentials = exportServiceBeanFactory
                 .getDatabaseBeanFactory()
                 .getDatabaseCredentialService()
                 .getDatabaseCredentialDetails(dataExportRequestMapper);

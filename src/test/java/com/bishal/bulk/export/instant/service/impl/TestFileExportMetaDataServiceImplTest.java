@@ -1,6 +1,5 @@
 package com.bishal.bulk.export.instant.service.impl;
 
-import com.bishal.bulk.export.common.exception.NoDataFoundException;
 import com.bishal.bulk.export.common.mapper.response.FileMetaDetailsResponse;
 import com.bishal.bulk.export.common.service.IExportServiceBeanFactory;
 import com.bishal.bulk.export.common.service.IExportServiceBeanFactoryTest;

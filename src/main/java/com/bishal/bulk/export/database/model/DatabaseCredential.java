@@ -1,6 +1,6 @@
 package com.bishal.bulk.export.database.model;
 
-public class DatabaseCredentials {
+public class DatabaseCredential {
 
     private String hostUrl;
     private Integer portNumber;

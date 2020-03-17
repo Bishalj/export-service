@@ -3,7 +3,7 @@ package com.bishal.bulk.export.database.service.impl;
 import com.bishal.bulk.export.common.exception.NoDataFoundException;
 import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
 import com.bishal.bulk.export.common.service.IExportServiceBeanFactory;
-import com.bishal.bulk.export.database.model.DatabaseCredentials;
+import com.bishal.bulk.export.database.model.DatabaseCredential;
 import com.bishal.bulk.export.database.service.IDatabaseCredentialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +19,9 @@ public class DatabaseCredentialServiceImpl implements IDatabaseCredentialService
     private IExportServiceBeanFactory exportServiceBeanFactory;
 
     @Override
-    public Mono<DatabaseCredentials> getDatabaseCredentialDetails(DataExportRequestMapper dataExportRequestMapper){
+    public Mono<DatabaseCredential> getDatabaseCredentialDetails(DataExportRequestMapper dataExportRequestMapper){
 
-        final Mono<DatabaseCredentials> databaseCredentialMono = exportServiceBeanFactory
+        final Mono<DatabaseCredential> databaseCredentialMono = exportServiceBeanFactory
                                                                     .getDatabaseBeanFactory()
                                                                     .getDatabaseCredentialUtils()
                                                                     .getDatabaseCredential(dataExportRequestMapper.getDatabaseUniqueKey(), dataExportRequestMapper.getDatabaseName());
@@ -30,17 +30,17 @@ public class DatabaseCredentialServiceImpl implements IDatabaseCredentialService
 
     }
 
-    private Mono<DatabaseCredentials> processDatabaseCredentials(DatabaseCredentials databaseCredential) {
+    private Mono<DatabaseCredential> processDatabaseCredentials(DatabaseCredential databaseCredential) {
         if(isDatabaseCredentialsInvalid(databaseCredential))
             return Mono.error(new NoDataFoundException("Invalid database credentials"));
         return Mono.just(databaseCredential);
     }
 
-    private boolean isDatabaseCredentialsInvalid(DatabaseCredentials databaseCredentials) {
-        return  ObjectUtils.isEmpty(databaseCredentials) ||
-                StringUtils.isEmpty(databaseCredentials.getHostUrl()) ||
-                ObjectUtils.isEmpty(databaseCredentials.getPortNumber()) ||
-                StringUtils.isEmpty(databaseCredentials.getUsername()) ||
-                StringUtils.isEmpty(databaseCredentials.getPassword());
+    private boolean isDatabaseCredentialsInvalid(DatabaseCredential databaseCredential) {
+        return  ObjectUtils.isEmpty(databaseCredential) ||
+                StringUtils.isEmpty(databaseCredential.getHostUrl()) ||
+                ObjectUtils.isEmpty(databaseCredential.getPortNumber()) ||
+                StringUtils.isEmpty(databaseCredential.getUsername()) ||
+                StringUtils.isEmpty(databaseCredential.getPassword());
     }
 }
