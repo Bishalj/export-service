@@ -2,6 +2,7 @@ package com.bishal.bulk.export.instant.service.impl;
 
 import com.bishal.bulk.export.common.mapper.response.FileMetaDetailsResponse;
 import com.bishal.bulk.export.common.mapper.resquest.DataExportRequestMapper;
+import com.bishal.bulk.export.common.service.IExportServiceBeanFactory;
 import com.bishal.bulk.export.common.utils.database.DatabaseConnectionStoreUtils;
 import com.bishal.bulk.export.database.service.IDatabaseCredentialService;
 import com.bishal.bulk.export.database.utils.DatabaseCredentialUtils;
@@ -20,13 +21,15 @@ public class FileExportMetaDataServiceImpl implements IFileExportMetaDataService
     private DatabaseCredentialUtils databaseCredentialUtils;
 
     @Autowired
-    private IDatabaseCredentialService databaseCredentialService;
+    private IExportServiceBeanFactory exportServiceBeanFactory;
 
     @Override
     public Flux<FileMetaDetailsResponse> getDetailOfFileContainingData(final DataExportRequestMapper dataExportRequestMapper) {
         if(isRequestDataInvalid(dataExportRequestMapper))
             return Flux.error(new IllegalArgumentException("Invalid requestData"));
-        return databaseCredentialService
+        return exportServiceBeanFactory
+                .getDatabaseBeanFactory()
+                .getDatabaseCredentialService()
                 .getDatabaseCredentialDetails(dataExportRequestMapper)
                 .map( aDatabaseCredential -> DatabaseConnectionStoreUtils.getDatabaseConnectionFromDatabaseStore(aDatabaseCredential, dataExportRequestMapper.getDatabaseUniqueKey()))
                 .flatMapMany(reactiveMongoTemplate -> Flux.empty());
